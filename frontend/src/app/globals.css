@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --background: #121a1e;
+  --foreground: #eeeeee;
+  --accent: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  body {
+    @apply selection:bg-white/10 selection:text-white;
+  }
+}

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barry Mamadou Bailo - Personnel</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Montserrat:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #121a1e;
+            color: #eee;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ============ TERMINAL PHASE ============ */
+        #terminal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #121a1e;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            transition: opacity 0.8s ease;
+        }
+
+        #terminal.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .terminal-header {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 25px;
+            opacity: 0.6;
+        }
+
+        .terminal-line {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .terminal-line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .terminal-line .prompt {
+            color: #888;
+            margin-right: 15px;
+        }
+
+        .terminal-line .command {
+            color: #fff;
+        }
+
+        .terminal-line .success {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .terminal-line .warning {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .terminal-line .info {
+            color: #aaa;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: #fff;
+            animation: blink 0.7s infinite;
+            vertical-align: text-bottom;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .scanline {
+            display: none;
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* ============ BIOS PHASE ============ */
+        #bios {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            z-index: 150;
+            padding: 40px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            color: #eee;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .bios-line {
+            margin-bottom: 5px;
+            white-space: pre-wrap;
+        }
+
+        /* ============ IMAGE PHASE ============ */
+        #image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #121a1e;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 50;
+        }
+
+        #image-container.visible {
+            opacity: 1;
+        }
+
+        .image-frame {
+            position: relative;
+            max-width: 90vw;
+            max-height: 85vh;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        .image-frame.reveal {
+            opacity: 1;
+            transform: scale(1) perspective(1000px) rotateX(0deg);
+        }
+
+        .image-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Glitch effect on image */
+        .image-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 0%,
+                    rgba(0, 229, 255, 0.05) 50%,
+                    transparent 100%);
+            animation: glitch-scan 4s ease-in-out infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Scanning bar on image */
+        .image-frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            z-index: 4;
+            animation: scan-bar 4s linear infinite;
+        }
+
+        @keyframes scan-bar {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(85vh);
+            }
+        }
+
+        @keyframes glitch-scan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: rgba(255, 255, 255, 0.3);
+            border-style: solid;
+            z-index: 3;
+        }
+
+        .corner.tl {
+            top: -2px;
+            left: -2px;
+            border-width: 3px 0 0 3px;
+        }
+
+        .corner.tr {
+            top: -2px;
+            right: -2px;
+            border-width: 3px 3px 0 0;
+        }
+
+        .corner.bl {
+            bottom: -2px;
+            left: -2px;
+            border-width: 0 0 3px 3px;
+        }
+
+        .corner.br {
+            bottom: -2px;
+            right: -2px;
+            border-width: 0 3px 3px 0;
+        }
+
+        .image-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.5s ease 1.5s;
+            white-space: nowrap;
+        }
+
+        .image-frame.reveal .image-label {
+            opacity: 0.6;
+        }
+
+        /* Back button */
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 300;
+            padding: 8px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link.visible {
+            opacity: 1;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Skip button */
+        #skip-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 300;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        #skip-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanline"></div>
+
+    <a href="/" class="back-link" id="back-link">&#8592; RETOUR PORTFOLIO</a>
+
+    <button id="skip-btn">PASSER L'ANIMATION [ESC]</button>
+
+    <!-- BIOS PHASE -->
+    <div id="bios"></div>
+
+    <!-- TERMINAL PHASE -->
+    <div id="terminal" style="display: none;">
+        <div class="terminal-header">barry@portfolio:~$ ./profil.sh</div>
+        <div id="terminal-output"></div>
+    </div>
+
+    <!-- IMAGE PHASE -->
+    <div id="image-container">
+        <div class="image-frame" id="image-frame">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+            <img src="/assets/images/projects/personal.png" alt="Profil de Barry Mamadou Bailo" />
+            <div class="image-label">// BARRY MAMADOU BAILO — PROFIL CHARGÉ //</div>
+        </div>
+    </div>
+
+    <!-- Particles -->
+    <script>
+        // Create floating particles
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = Math.random() * 100 + 'vh';
+            p.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(p);
+
+            // Animate particles
+            const animate = () => {
+                const duration = 3000 + Math.random() * 4000;
+                p.style.transition = `all ${duration}ms linear`;
+                p.style.opacity = Math.random() * 0.5;
+                p.style.transform = `translate(${(Math.random() - 0.5) * 200}px, ${-100 - Math.random() * 200}px)`;
+                setTimeout(() => {
+                    p.style.transition = 'none';
+                    p.style.transform = 'translate(0, 0)';
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.top = Math.random() * 100 + 'vh';
+                    setTimeout(animate, 50);
+                }, duration);
+            };
+            setTimeout(animate, Math.random() * 3000);
+        }
+    </script>
+
+    <script>
+        const biosLines = [
+            "AMIBIOS(C) 2024 American Megatrends, Inc.",
+            "BIOS Date: 03/12/26 11:23:45 Ver: 08.00.16",
+            "CPU: Barry-Core(TM) i9-14900K @ 6.20GHz",
+            "Speed: 6200MHz",
+            "",
+            "Memory Test: 65536MB OK",
+            "PMU: Initializing...",
+            "USB Device(s): 1 Keyboard, 1 Mouse, 3 Hubs",
+            "SATA Port 1: SSD 2TB",
+            "SATA Port 2: HDD 4TB",
+            "",
+            "Detecting storage devices... Done.",
+            "Loading System Kernel........",
+            "Entering Protected Mode...",
+            "BARRY OS v4.0.2 Initialized.",
+            "Starting Profiler Service...",
+            "SUCCESS: System ready."
+        ];
+
+        const terminalLines = [
+            { text: '<span class="prompt">&gt;</span> <span class="command">Initialisation du système...</span>', delay: 200, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="success">Connexion sécurisée établie [PROTOCOL: SSH-2]</span>', delay: 300, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="command">Chargement du profil utilisateur: BARRY_MB...</span>', delay: 200, type: true },
+            { text: '', delay: 100, type: false },
+            { text: '<span class="prompt">&gt;</span> <span class="info">NOM :</span> <span class="command">Barry Mamadou Bailo</span>', delay: 200, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="info">STATUT :</span> <span class="command">Étudiant en BUT Informatique</span>', delay: 200, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="info">LIEU :</span> <span class="command">Aix-Marseille Université — Arles</span>', delay: 200, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="info">PASSION :</span> <span class="command">Intelligence Artificielle</span>', delay: 200, type: true },
+            { text: '', delay: 100, type: false },
+            { text: '<span class="prompt">&gt;</span> <span class="command">Allocation mémoire pour module IA... Done.</span>', delay: 150, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="command">Vérification des compétences...</span>', delay: 200, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="success">[OK]</span> <span class="command">C++ · HTML · CSS · SQL</span>', delay: 150, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="success">[OK]</span> <span class="command">Algorithmique · Base de données</span>', delay: 150, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="success">[OK]</span> <span class="command">Git · Linux</span>', delay: 150, type: true },
+            { text: '', delay: 100, type: false },
+            { text: '<span class="prompt">&gt;</span> <span class="command">Synthèse de la fiche profil en cours...</span>', delay: 400, type: true },
+            { text: '<span class="prompt">&gt;</span> <span class="success">Profil décrypté avec succès ✓</span>', delay: 500, type: true },
+            { text: '', delay: 200, type: false },
+            { text: '<span class="prompt">&gt;</span> <span class="warning">DÉPLOIEMENT DE L\'INTERFACE HUD...</span><span class="cursor"></span>', delay: 700, type: true },
+        ];
+
+        const biosContainer = document.getElementById('bios');
+        const terminalContainer = document.getElementById('terminal');
+        const output = document.getElementById('terminal-output');
+        const imageContainer = document.getElementById('image-container');
+        const imageFrame = document.getElementById('image-frame');
+        const backLink = document.getElementById('back-link');
+        const skipBtn = document.getElementById('skip-btn');
+
+        let isSkipped = false;
+
+        function skipAnimation() {
+            if (isSkipped) return;
+            isSkipped = true;
+            biosContainer.style.display = 'none';
+            terminalContainer.style.display = 'none';
+            imageContainer.style.display = 'flex';
+            imageContainer.classList.add('visible');
+            imageFrame.classList.add('reveal');
+            backLink.classList.add('visible');
+            skipBtn.style.display = 'none';
+        }
+
+        skipBtn.addEventListener('click', skipAnimation);
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') skipAnimation();
+        });
+
+        function runBios(index = 0) {
+            if (isSkipped) return;
+            if (index >= biosLines.length) {
+                setTimeout(() => {
+                    biosContainer.style.display = 'none';
+                    terminalContainer.style.display = 'flex';
+                    runTerminal();
+                }, 500);
+                return;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'bios-line';
+            div.textContent = biosLines[index];
+            biosContainer.appendChild(div);
+            biosContainer.scrollTop = biosContainer.scrollHeight;
+
+            const nextDelay = biosLines[index] === "" ? 50 : Math.random() * 50 + 20;
+            setTimeout(() => runBios(index + 1), nextDelay);
+        }
+
+        async function typeText(element, html, speed = 25) {
+            return new Promise(resolve => {
+                let i = 0;
+                element.style.opacity = 1;
+                element.style.transform = 'translateX(0)';
+
+                // If it's HTML, we need to handle tags
+                if (html.includes('<')) {
+                    element.innerHTML = html;
+                    resolve();
+                    return;
+                }
+
+                const timer = setInterval(() => {
+                    if (isSkipped) {
+                        clearInterval(timer);
+                        resolve();
+                        return;
+                    }
+                    element.textContent += html.charAt(i);
+                    i++;
+                    if (i >= html.length) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        let currentLine = 0;
+
+        async function runTerminal() {
+            if (isSkipped) return;
+            if (currentLine >= terminalLines.length) {
+                setTimeout(showImage, 600);
+                return;
+            }
+
+            const lineData = terminalLines[currentLine];
+            const div = document.createElement('div');
+            div.className = 'terminal-line';
+            output.appendChild(div);
+
+            if (lineData.type && lineData.text !== '') {
+                // If it contains HTML, we just show it for now to avoid breaking tags
+                // but we simulate the delay
+                div.innerHTML = lineData.text;
+                div.classList.add('visible');
+            } else {
+                div.innerHTML = lineData.text;
+                div.classList.add('visible');
+            }
+
+            currentLine++;
+            setTimeout(runTerminal, lineData.delay);
+        }
+
+        function showImage() {
+            if (isSkipped) return;
+            terminalContainer.classList.add('fade-out');
+
+            setTimeout(() => {
+                terminalContainer.style.display = 'none';
+                imageContainer.classList.add('visible');
+                skipBtn.style.display = 'none';
+
+                setTimeout(() => {
+                    imageFrame.classList.add('reveal');
+                    backLink.classList.add('visible');
+                }, 300);
+            }, 800);
+        }
+
+        // Start animation
+        setTimeout(runBios, 500);
+    </script>
+</body>
+
+</html>
