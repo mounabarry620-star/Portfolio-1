@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 
@@ -9,28 +10,57 @@ interface ProjectCardProps {
   description?: string;
   tags: string[];
   image?: string;
+  gallery?: string[];
   github?: string;
   live?: string;
   isHighlighted?: boolean;
   onClick?: () => void;
 }
 
-export default function ProjectCard({ title, description, tags, image, github, live, isHighlighted, onClick }: ProjectCardProps) {
+export default function ProjectCard({ title, description, tags, image, gallery, github, live, isHighlighted, onClick }: ProjectCardProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isHovered && gallery && gallery.length > 0) {
+      interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % gallery.length);
+      }, 1500);
+    } else {
+      setCurrentIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isHovered, gallery]);
+
   if (isHighlighted && image) {
     return (
       <motion.div
         layoutId={`project-${title}`}
         onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         whileHover={{ y: -5 }}
         className="group relative col-span-1 md:col-span-2 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)] cursor-pointer"
       >
         <div className="relative h-64 w-full overflow-hidden md:h-96">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isHovered && gallery && gallery.length > 0 ? currentIndex : "static"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={isHovered && gallery && gallery.length > 0 ? gallery[currentIndex] : image}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </motion.div>
+          </AnimatePresence>
           <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
           
           <div className="absolute top-6 right-6 z-10 flex gap-3">
@@ -71,10 +101,10 @@ export default function ProjectCard({ title, description, tags, image, github, l
               Highlight / Winner
             </motion.div>
             <h3 className="text-3xl font-black text-white md:text-5xl mb-4 drop-shadow-lg">{title}</h3>
-            <p className="max-w-2xl text-lg text-white/70 line-clamp-2 md:text-xl">{description}</p>
+            <p className="max-w-2xl text-lg text-white/90 line-clamp-2 md:text-xl font-medium">{description}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               {tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-md">
+                <span key={tag} className="rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-white backdrop-blur-md shadow-lg">
                   {tag}
                 </span>
               ))}
@@ -90,20 +120,20 @@ export default function ProjectCard({ title, description, tags, image, github, l
       onClick={onClick}
       whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
       whileTap={{ scale: 0.98 }}
-      className="group relative flex cursor-pointer items-center justify-between rounded-2xl border border-white/5 bg-white/3 p-6 transition-all hover:border-blue-500/30 shadow-lg hover:shadow-blue-500/10"
+      className="group relative flex cursor-pointer items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-6 transition-all hover:border-blue-500/50 shadow-2xl hover:shadow-blue-500/10"
     >
       <div className="flex items-center gap-6">
-        <div className="h-2 w-2 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
+        <div className="h-2 w-2 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,1)]" />
         <div>
-          <h3 className="line-clamp-1 text-lg font-bold text-white mb-2">{title}</h3>
-          <p className="text-sm text-white/40 line-clamp-1 group-hover:text-white/60 transition-colors mb-2">
+          <h3 className="line-clamp-1 text-lg font-black text-white mb-2">{title}</h3>
+          <p className="text-sm text-white/90 line-clamp-1 group-hover:text-white transition-colors mb-2 font-medium">
             {description}
           </p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/50"
+                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white/90 shadow-sm"
               >
                 {tag}
               </span>

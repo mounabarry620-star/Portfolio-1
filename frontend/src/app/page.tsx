@@ -8,6 +8,7 @@ import SkillCard from "@/components/SkillCard";
 import ProjectCard from "@/components/ProjectCard";
 import ContactForm from "@/components/ContactForm";
 import SkillsShowcase from "@/components/SkillsShowcase";
+import GithubActivity from "@/components/GithubActivity";
 import { Mail, Github, Linkedin, ArrowDown, X } from "lucide-react";
 
 interface Skill {
@@ -249,12 +250,12 @@ export default function Home() {
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <h3 className="text-2xl font-semibold text-white mb-6">Bonjour, je suis Barry.</h3>
-            <p className="text-lg leading-relaxed text-white/70">
+            <p className="text-lg leading-relaxed text-white/90">
               Étudiant en BUT Informatique à Aix-Marseille Université (site d'Arles).<br />
               Passionné par l'intelligence artificielle et les nouvelles technologies.<br />
               Après un bac scientifique SM mention Bien en Guinée et un parcours en génie mécanique,
               j'ai suivi ma véritable passion en me réorientant vers l'informatique via Campus France.<br />
-              Mon objectif : devenir ingénieur en IA et créer ma propre start-up.
+              Mon objectif : devenir ingénieur en IA appliqué à la cybersécurité.
             </p>
           </div>
           
@@ -263,6 +264,8 @@ export default function Home() {
           </div>
         </div>
       </Section>
+      
+      <GithubActivity />
 
       {/* Contact Section */}
       <Section id="contact" title="Contactez-moi" className="mb-32">
@@ -270,20 +273,20 @@ export default function Home() {
           {/* Info Card */}
           <div className="flex flex-col justify-between">
             <div>
-              <p className="text-xl text-white/60 leading-relaxed mb-12">
+              <p className="text-xl text-white/90 leading-relaxed mb-12">
                 Je suis toujours ouvert à de nouvelles opportunités et collaborations passionnantes. 
                 N&apos;hésitez pas à me contacter via le formulaire ou sur mes réseaux sociaux.
               </p>
               
               <div className="space-y-8">
-                <a href="mailto:mounabarry620@gmail.com" className="group flex items-center gap-6 text-white/40 hover:text-white transition-colors">
+                <a href="mailto:mounabarry620@gmail.com" className="group flex items-center gap-6 text-white/90 hover:text-white transition-colors">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-all group-hover:border-white/40 group-hover:bg-white group-hover:text-black shadow-xl">
                     <Mail className="h-6 w-6" />
                   </div>
                   <span className="text-xl font-medium tracking-tight">mounabarry620@gmail.com</span>
                 </a>
                 
-                <a href="tel:0753172752" className="group flex items-center gap-6 text-white/40 hover:text-white transition-colors">
+                <a href="tel:0753172752" className="group flex items-center gap-6 text-white/90 hover:text-white transition-colors">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-all group-hover:border-white/40 group-hover:bg-white group-hover:text-black shadow-xl">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                   </div>
@@ -304,7 +307,7 @@ export default function Home() {
                   key={social.name}
                   href={social.href}
                   target="_blank"
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/40 transition-all hover:scale-110 hover:border-white/40 hover:bg-white hover:text-black shadow-xl"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/90 transition-all hover:scale-110 hover:border-white/40 hover:bg-white hover:text-black shadow-xl"
                   aria-label={social.name}
                 >
                   {social.icon}

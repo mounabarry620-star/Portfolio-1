@@ -47,7 +47,7 @@ export default function ContactForm() {
           >
             <CheckCircle2 className="mb-4 h-16 w-16 text-white" />
             <h3 className="text-2xl font-bold text-white">Message envoyé !</h3>
-            <p className="mt-2 text-white/40">Je vous répondrai dès que possible.</p>
+            <p className="mt-2 text-white/70 border border-white/10 rounded-full px-4 py-1 bg-white/5">Je vous répondrai dès que possible.</p>
           </motion.div>
         ) : (
           <motion.form
@@ -59,7 +59,7 @@ export default function ContactForm() {
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/30 ml-4">Nom</label>
+                <label className="text-xs font-black uppercase tracking-widest text-white/90 ml-4">Nom</label>
                 <input
                   type="text"
                   required
@@ -70,7 +70,7 @@ export default function ContactForm() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/30 ml-4">Prénom</label>
+                <label className="text-xs font-black uppercase tracking-widest text-white/90 ml-4">Prénom</label>
                 <input
                   type="text"
                   required
@@ -83,7 +83,7 @@ export default function ContactForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-white/30 ml-4">Message</label>
+              <label className="text-xs font-black uppercase tracking-widest text-white/90 ml-4">Message</label>
               <textarea
                 required
                 rows={5}
