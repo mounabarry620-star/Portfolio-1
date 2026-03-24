@@ -8,24 +8,35 @@ interface SectionProps {
   title: string;
   children: ReactNode;
   className?: string;
+  delay?: number;
 }
 
-export default function Section({ id, title, children, className = "" }: SectionProps) {
+export default function Section({ id, title, children, className = "", delay = 0 }: SectionProps) {
   return (
-    <section id={id} className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}>
+    <section id={id} className={`py-32 px-6 md:px-12 max-w-7xl mx-auto ${className}`}>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16"
+      >
+        <span className="section-sub-text block mb-2">
+          {title}
+        </span>
+        <h2 className="section-head-text">
+          {title}.
+        </h2>
+        <div className="mt-4 h-0.5 w-20 bg-linear-to-r from-blue-700 to-blue-400 rounded-full" />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
+        transition={{ duration: 0.8, delay: delay + 0.2 }}
       >
-        <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
-          {title}
-        </h2>
-        <div className="mt-4 h-1 w-12 rounded-full bg-white/20" />
+        {children}
       </motion.div>
-      {children}
     </section>
   );
 }

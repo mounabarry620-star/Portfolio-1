@@ -6,20 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.ContactService = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const projects_module_1 = require("./projects/projects.module");
-const contact_module_1 = require("./contact/contact.module");
-let AppModule = class AppModule {
+let ContactService = class ContactService {
+    async handleContactSubmission(data) {
+        console.log('Nouveau message reçu:', data);
+        return { success: true, message: 'Message reçu par le serveur' };
+    }
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
-    (0, common_1.Module)({
-        imports: [projects_module_1.ProjectsModule, contact_module_1.ContactModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
-    })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+exports.ContactService = ContactService;
+exports.ContactService = ContactService = __decorate([
+    (0, common_1.Injectable)()
+], ContactService);
+//# sourceMappingURL=contact.service.js.map

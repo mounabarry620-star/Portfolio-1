@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import SmoothScroll from "@/components/SmoothScroll";
+import Cursor from "@/components/Cursor";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({ 
+  subsets: ["latin"], 
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins"
+});
 
 export const metadata: Metadata = {
-  title: "Barry Mamadou Bailo - Portfolio",
-  description: "Étudiant en BUT Informatique, passionné par l'intelligence artificielle",
+  title: "BARRY Mamadou Bailo - Portfolio",
+  description: "Etudiant en Première année de BUT informatique à Arles",
 };
 
 export default function RootLayout({
@@ -17,9 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="scroll-smooth">
-      <body className={`${inter.className} bg-background text-foreground antialiased`}>
-        <Navbar />
-        {children}
+      <body className={`${poppins.variable} ${poppins.className} bg-background text-foreground antialiased font-poppins`}>
+        <SmoothScroll>
+          <Cursor />
+          <Navbar />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

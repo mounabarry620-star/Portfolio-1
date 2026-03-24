@@ -12,31 +12,22 @@ interface SkillCardProps {
 export default function SkillCard({ name, iconPath, index }: SkillCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: index * 0.1,
-      }}
-      whileHover={{ 
-        scale: 1.1,
-        transition: { type: "spring", stiffness: 400, damping: 10 }
-      }}
-      className="group relative flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-5 transition-all hover:bg-white/10 hover:shadow-2xl hover:shadow-black/50"
+      transition={{ delay: index * 0.05 }}
+      whileHover={{ scale: 1.3 }}
+      className="flex items-center justify-center p-4"
     >
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white p-2 shadow-lg dark:bg-white">
+      <div className="relative flex h-24 w-24 items-center justify-center">
         <Image
           src={iconPath}
           alt={name}
-          width={60}
-          height={60}
-          className="object-contain"
+          width={96}
+          height={96}
+          className="object-contain drop-shadow-[0_0_25px_rgba(255,255,255,0.5)] transition-all duraiton-500 hover:drop-shadow-[0_0_40px_rgba(255,255,255,0.8)]"
         />
       </div>
-      <span className="text-sm font-semibold text-white/90">{name}</span>
     </motion.div>
   );
 }
