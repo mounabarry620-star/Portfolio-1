@@ -33,18 +33,20 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
     return () => clearInterval(interval);
   }, [isHovered, gallery]);
 
+  // ── HIGHLIGHTED CARD (HYPOXIA) ──────────────────────────────────────────────
   if (isHighlighted && image) {
     return (
+      // Outer wrapper: NO overflow-hidden so buttons are never clipped
       <motion.div
         layoutId={`project-${title}`}
-        onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         whileHover={{ y: -5 }}
-        className="group relative col-span-1 md:col-span-2 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)] cursor-pointer"
+        className="group relative col-span-1 md:col-span-2 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)]"
       >
-        <div className="relative h-64 w-full overflow-hidden md:h-96">
-          {/* Image layer */}
+        {/* Image area — overflow-hidden scoped only here */}
+        <div className="relative h-64 w-full overflow-hidden rounded-3xl md:h-96">
+          {/* Animated image */}
           <AnimatePresence mode="wait">
             <motion.div
               key={isHovered && gallery && gallery.length > 0 ? currentIndex : "static"}
@@ -63,42 +65,15 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
             </motion.div>
           </AnimatePresence>
 
-          {/* Gradient overlay - MUST NOT block clicks */}
+          {/* Gradient — visual only, blocks nothing */}
           <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent pointer-events-none" />
-          
-          {/* Link buttons - MUST be clickable above everything */}
-          <div className="absolute top-6 right-6 z-50 flex gap-4 pointer-events-auto">
-            {github && (
-              <a
-                href={github}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-white hover:text-black shadow-2xl cursor-pointer"
-              >
-                <Github className="h-7 w-7" />
-              </a>
-            )}
-            {live ? (
-              <a
-                href={live}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-blue-500 hover:text-white shadow-2xl cursor-pointer"
-              >
-                <ExternalLink className="h-7 w-7" />
-              </a>
-            ) : gallery && gallery.length > 0 ? (
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all group-hover:bg-white group-hover:text-black">
-                <Eye className="h-7 w-7" />
-              </div>
-            ) : null}
-          </div>
 
-          {/* Bottom text content - should not block card clicks */}
-          <div className="absolute bottom-0 left-0 p-8 md:p-12 pointer-events-none">
-            <motion.div 
+          {/* Gallery click zone — sits behind buttons */}
+          <div className="absolute inset-0 z-10 cursor-pointer" onClick={onClick} />
+
+          {/* Text content — visual only */}
+          <div className="absolute bottom-0 left-0 p-8 md:p-12 pointer-events-none z-20">
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="inline-block rounded-full bg-blue-600 px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white mb-4"
@@ -116,10 +91,35 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
             </div>
           </div>
         </div>
+
+        {/* ✅ Buttons: OUTSIDE overflow-hidden div — never clipped, always clickable */}
+        <div className="absolute top-6 right-6 z-50 flex gap-4">
+          {github && (
+            <a
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-xl border border-white/20 transition-all hover:scale-110 hover:bg-white hover:text-black shadow-2xl"
+            >
+              <Github className="h-7 w-7" />
+            </a>
+          )}
+          {live && (
+            <a
+              href={live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-xl border border-white/20 transition-all hover:scale-110 hover:bg-blue-500 hover:text-white shadow-2xl"
+            >
+              <ExternalLink className="h-7 w-7" />
+            </a>
+          )}
+        </div>
       </motion.div>
     );
   }
 
+  // ── STANDARD PROJECT CARD ───────────────────────────────────────────────────
   return (
     <motion.div
       onClick={onClick}
@@ -146,7 +146,7 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
           </div>
         </div>
       </div>
-      
+
       <div className="flex items-center gap-2">
         {github && (
           <motion.a
@@ -154,7 +154,7 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className="rounded-full bg-white/5 p-3 text-white transition-all hover:bg-white hover:text-black"
           >
@@ -167,9 +167,9 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            whileHover={{ scale: 1.1, backgroundColor: "#3b82f6", color: "#fff" }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="rounded-full bg-white/10 p-3 text-white transition-all shadow-xl"
+            className="rounded-full bg-white/10 p-3 text-white transition-all shadow-xl hover:bg-blue-500"
           >
             <ExternalLink className="h-5 w-5" />
           </motion.a>
