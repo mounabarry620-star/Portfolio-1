@@ -28,5 +28,5 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return <>{children}</>;
+  return <div className="relative">{children}</div>;
 }

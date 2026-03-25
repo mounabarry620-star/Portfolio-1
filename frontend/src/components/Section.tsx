@@ -13,13 +13,13 @@ interface SectionProps {
 
 export default function Section({ id, title, children, className = "", delay = 0 }: SectionProps) {
   return (
-    <section id={id} className={`py-32 px-6 md:px-12 max-w-7xl mx-auto ${className}`}>
+    <section id={id} className={`relative py-32 px-6 md:px-12 max-w-7xl mx-auto ${className}`}>
       <motion.div
         initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, margin: "-10%" }}
         transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16"
+        className="mb-4"
       >
         <span className="section-sub-text block mb-2">
           {title}

@@ -28,14 +28,18 @@ interface Project {
 }
 
 const SKILLS: Skill[] = [
-  { name: "HTML5", icon: "/images/skills/html_logo.png" },
-  { name: "CSS3", icon: "/images/skills/css_logo.png" },
-  { name: "JavaScript", icon: "/images/skills/js_logo.png" },
-  { name: "C++", icon: "/images/skills/cpp_logo.png" },
+  { name: "C++", icon: "/images/skills/c++_logo.png" },
+  { name: "Python", icon: "/images/skills/python_logo.png" },
+  { name: "Bash", icon: "/images/skills/bash_logo.png" },
+  { name: "Qt", icon: "/images/skills/qt_logo.png" },
   { name: "SQL", icon: "/images/skills/sql_logo.png" },
+  { name: "Postgres", icon: "/images/skills/postgres_logo.png" },
+  { name: "SageMath", icon: "/images/skills/sage_math_logo.png" },
   { name: "Git", icon: "/images/skills/git_logo.png" },
   { name: "Linux", icon: "/images/skills/linux_logo.png" },
-  { name: "Python", icon: "/images/skills/python_logo.png" },
+  { name: "HTML", icon: "/images/skills/html_logo.png" },
+  { name: "CSS", icon: "/images/skills/css_logo.png" },
+  { name: "VS Code", icon: "/images/skills/vs_code_logo.png" },
 ];
 
 const PROJECTS: Project[] = [
@@ -57,24 +61,40 @@ const PROJECTS: Project[] = [
     isHighlighted: true,
   },
   {
-    title: "SAE 1 - Site Web Statique",
-    description: "Création d'un site vitrine responsive et moderne pour présenter une entreprise fictive",
-    tags: ["HTML", "CSS"],
+    title: "SAE 1.01 | Bibliothèque CLI",
+    description: "Développement d'une application robuste en ligne de commande pour la gestion d'une bibliothèque numérique avec stockage .db et configuration ASCII personnalisé.",
+    tags: ["C++", "CLI", "Data Management"],
+    image: "/images/projects/sae/s101.png",
   },
   {
-    title: "SAE 2 - Algorithmique",
-    description: "Implémentation d'algorithmes de tri et analyse de leur complexité temporelle",
-    tags: ["C++"],
+    title: "SAE 1.02 | Site Web Statique",
+    description: "Conception et réalisation d'un site vitrine responsive et moderne pour un client fictif, mettant en avant l'accessibilité et le design.",
+    tags: ["HTML", "CSS", "UI/UX"],
+    image: "/images/projects/sae/s102.png",
   },
   {
-    title: "SAE 3 - Base de données",
-    description: "Conception et gestion d'une base de données relationnelle avec travail collaboratif",
-    tags: ["SQL", "Collaboration"],
+    title: "SAE 1.03 | Installation Multiboot",
+    description: "Configuration d'un poste de travail expert en multiboot (Windows/Linux) via Oracle VirtualBox avec installation complète des outils de développement.",
+    tags: ["Linux", "VirtualBox", "System"],
+    image: "/images/projects/sae/s103.png",
+  },
+  {
+    title: "SAE 2.01 | Algorithmique",
+    description: "Implémentation d'algorithmes complexes de tri et de recherche, avec analyse de complexité temporelle et spatiale en C++.",
+    tags: ["C++", "Algorithms"],
+    image: "/images/projects/sae/s201.png",
+  },
+  {
+    title: "SAE 3.01 | Base de données",
+    description: "Conception, normalisation et gestion d'une base de données relationnelle SQL avec travail collaboratif et requêtes complexes.",
+    tags: ["SQL", "Postgres", "Collaboration"],
+    image: "/images/projects/sae/s301.png",
   },
   {
     title: "Mon Portfolio",
-    description: "Mon portfolio interactif avec animations 3D et stack moderne",
-    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
+    description: "Mon portfolio interactif avec HUD dynamique, animations 3D et stack moderne Next.js.",
+    tags: ["Next.js", "Tailwind CSS", "HUD"],
+    image: "/images/projects/sae/portfolio.png",
   },
 ];
 
@@ -105,6 +125,7 @@ export default function Home() {
           src="/images/background.jpg"
           alt="Background"
           fill
+          sizes="100vw"
           className="object-cover object-center filter grayscale contrast-125 blur-[1px] brightness-90 transition-all duration-1000"
           priority
         />
@@ -119,9 +140,8 @@ export default function Home() {
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-[120px]" />
       </motion.div>
-
-      {/* Hero Section */}
-      <section id="home" className="relative flex min-h-screen flex-col items-center justify-center pt-20 z-10">
+        {/* Hero Section */}
+      <section id="home" className="relative flex min-h-screen flex-col items-center justify-center pt-20 z-10 px-6">
         <motion.div
           style={{ y: textY, opacity }}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -129,15 +149,19 @@ export default function Home() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="mb-16 flex items-center justify-center gap-10">
+          {/* 1. Logos (at the top) */}
+          <div className="mb-10 flex items-center justify-center gap-10">
              <div className="h-32 w-1.5 rounded-full bg-linear-to-b from-blue-600 to-transparent animate-pulse" />
              <div className="h-32 w-24 rounded-[2.5rem] border border-white/20 bg-white/5 backdrop-blur-xl flex items-center justify-center overflow-hidden relative shadow-[0_0_50px_rgba(59,130,246,0.15)]">
                <Image 
                  src="/images/loop.gif" 
                  alt="Loop Animation" 
                  fill
+                 sizes="(max-width: 768px) 100px, 150px"
                  className="object-cover scale-110"
                  unoptimized
+                 priority
+                 loading="eager"
                />
              </div>
              <div className="h-24 w-24 rounded-full border border-white/40 bg-white shadow-[0_0_50px_rgba(59,130,246,0.4)] flex items-center justify-center overflow-hidden relative p-2">
@@ -145,16 +169,41 @@ export default function Home() {
                  src="/images/Logo IUT couleurs.png" 
                  alt="IUT Logo" 
                  fill
+                 sizes="(max-width: 768px) 100px, 150px"
                  className="object-contain"
                />
              </div>
           </div>
+
+          {/* 2. Profile Photo (Enlarged & Centered) */}
+          <div className="mb-12 flex flex-col items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="relative h-64 w-64 lg:h-72 lg:w-72 rounded-full border-2 border-white/20 bg-white/5 backdrop-blur-3xl p-1 shadow-[0_0_80px_rgba(59,130,246,0.2)] group"
+            >
+              <div className="absolute inset-0 rounded-full bg-linear-to-b from-blue-500/20 to-transparent blur-2xl" />
+              <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10">
+                <Image 
+                  src="/images/profile.png" 
+                  alt="BARRY Mamadou Bailo" 
+                  fill
+                  sizes="(max-width: 768px) 250px, 300px"
+                  className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+                  priority
+                />
+              </div>
+            </motion.div>
+          </div>
           
-          <h1 className="hero-head-text !text-[4rem] sm:!text-[6rem] lg:!text-[8rem] leading-none">
+          {/* 3. Name & Subtext */}
+          <h1 className="hero-head-text !text-[4rem] sm:!text-[6rem] lg:text-[8rem]! leading-none">
             BARRY Mamadou Bailo
           </h1>
           <p className="hero-sub-text mt-6">
             Etudiant en Première année de BUT informatique à Arles
+            <span className="block mt-2 text-blue-400 font-bold tracking-[0.2em] uppercase text-[10px] sm:text-xs drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]">Parcours : Réalisation d&apos;applications : conception, développement, validation</span>
           </p>
           
           <motion.div
@@ -247,19 +296,79 @@ export default function Home() {
 
       {/* About Section */}
       <Section id="about" title="À Propos">
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div>
-            <h3 className="text-2xl font-semibold text-white mb-6">Bonjour, je suis Barry.</h3>
-            <p className="text-lg leading-relaxed text-white/90">
-              Étudiant en BUT Informatique à Aix-Marseille Université (site d'Arles).<br />
-              Passionné par l'intelligence artificielle et les nouvelles technologies.<br />
+        <div className="grid gap-16 lg:grid-cols-2 items-center">
+          {/* Column 1: Text */}
+          <div className="lg:col-span-1">
+            <h3 className="text-3xl font-bold text-white mb-4 tracking-tight italic uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Bonjour, je suis Barry.</h3>
+            <p className="text-lg leading-relaxed text-white/80 font-medium whitespace-pre-line">
+              Étudiant en BUT Informatique première année à Aix-Marseille Université (site d'Arles).
+              <span className="block mt-2 text-blue-400 font-bold tracking-wide uppercase text-sm">Parcours : Réalisation d'applications : conception, développement, validation</span>
+              Passionné par l'intelligence artificielle et les nouvelles technologies.
               Après un bac scientifique SM mention Bien en Guinée et un parcours en génie mécanique,
-              j'ai suivi ma véritable passion en me réorientant vers l'informatique via Campus France.<br />
+              j'ai suivi ma véritable passion en me réorientant vers l'informatique via Campus France.
               Mon objectif : devenir ingénieur en IA appliqué à la cybersécurité.
             </p>
           </div>
           
-          <div className="flex flex-col items-center justify-center py-10">
+          {/* Column 2: Educational Journey (Superposed Images) */}
+          <div className="lg:col-span-1 flex flex-col items-center lg:items-end relative min-h-[450px] lg:min-h-[550px] mt-10 lg:mt-0 px-4">
+             {/* Gamal Image (Conakry) */}
+             <motion.div
+               whileInView={{ opacity: 1, x: 0, rotate: -8 }}
+               initial={{ opacity: 0, x: 50, rotate: 0 }}
+               whileHover={{ rotate: 0, scale: 1.1, zIndex: 10 }}
+               transition={{ duration: 0.6 }}
+               className="relative lg:absolute top-0 right-14 w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group mb-10 lg:mb-0 transition-all cursor-pointer z-0"
+             >
+                <Image 
+                  src="/images/about/gamal.jpg" 
+                  alt="Education Conakry" 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 320px"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 blur-[0.5px] group-hover:blur-0 grayscale group-hover:grayscale-0"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <p className="text-[10px] font-black tracking-[0.2em] text-white uppercase italic">Phase I: Gamal Conakry</p>
+                </div>
+             </motion.div>
+
+             {/* IUT Arles Image */}
+             <motion.div
+               whileInView={{ opacity: 1, x: 0, rotate: 10 }}
+               initial={{ opacity: 0, x: 50, rotate: 0 }}
+               whileHover={{ rotate: 0, scale: 1.1, zIndex: 10 }}
+               transition={{ duration: 0.6, delay: 0.2 }}
+               className="relative lg:absolute top-32 right-2 w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all cursor-pointer z-5"
+             >
+                <Image 
+                  src="/images/about/arles.jpg" 
+                  alt="Education Arles" 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 320px"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 blur-[0.5px] group-hover:blur-0 grayscale group-hover:grayscale-0"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <p className="text-[10px] font-black tracking-[0.2em] text-white uppercase italic">Phase II: IUT Arles</p>
+                </div>
+             </motion.div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Skills Section */}
+      <Section id="skills" title="Compétences">
+        <div className="flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="max-w-4xl text-center mb-16"
+          >
+            <p className="text-xl text-white/70 leading-relaxed font-medium">
+              Durant ma première année d'informatique, voici les compétences techniques que j'ai apprises et que je continue d'approfondir. Bien sûr, il en existe d'autres, mais actuellement ce sont celles que j'utilise le plus fréquemment au quotidien.
+            </p>
+          </motion.div>
+          
+          <div className="w-full">
             <SkillsShowcase skills={SKILLS} />
           </div>
         </div>
@@ -299,7 +408,6 @@ export default function Home() {
             <div className="mt-16 flex flex-wrap gap-6">
               {[
                 { name: "WhatsApp", icon: <svg className="h-6 w-6 fill-current" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>, href: "https://wa.me/33753172752" },
-                { name: "Instagram", icon: <svg className="h-6 w-6 fill-current" viewBox="0 0 16 16"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.844.047 1.097.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.282.11-.705.24-1.485.276-.844.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/></svg>, href: "#" },
                 { name: "Github", icon: <Github className="h-6 w-6" />, href: "https://github.com/mounabarry620-star" },
                 { name: "Linkedin", icon: <Linkedin className="h-6 w-6" />, href: "https://www.linkedin.com/in/mamadou-baillo-barry-aa852333a" },
               ].map((social) => (
@@ -307,6 +415,7 @@ export default function Home() {
                   key={social.name}
                   href={social.href}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/90 transition-all hover:scale-110 hover:border-white/40 hover:bg-white hover:text-black shadow-xl"
                   aria-label={social.name}
                 >

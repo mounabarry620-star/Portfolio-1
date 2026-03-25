@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { GitHubCalendar } from "react-github-calendar";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import Section from "./Section";
+
+// Import GitHubCalendar dynamically to avoid SSR issues with the library
+const GitHubCalendarWrapper = dynamic(
+  () => import("react-github-calendar").then((mod) => mod.GitHubCalendar),
+  { ssr: false }
+);
 
 const GITHUB_THEME = {
   light: ["#ebebeb", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
@@ -31,9 +37,10 @@ export default function GithubActivity() {
         <div className="flex flex-col items-center justify-center gap-8">
           <div className="w-full text-white overflow-x-auto no-scrollbar py-4 flex justify-center min-h-[150px]">
             {mounted ? (
-              <GitHubCalendar
+              <GitHubCalendarWrapper
                 username="mounabarry620-star"
                 theme={GITHUB_THEME}
+                colorScheme="dark"
                 blockSize={14}
                 blockMargin={6}
                 fontSize={14}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Eye } from "lucide-react";
 import Image from "next/image";
 
 interface ProjectCardProps {
@@ -44,6 +44,7 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
         className="group relative col-span-1 md:col-span-2 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)] cursor-pointer"
       >
         <div className="relative h-64 w-full overflow-hidden md:h-96">
+          {/* Image layer */}
           <AnimatePresence mode="wait">
             <motion.div
               key={isHovered && gallery && gallery.length > 0 ? currentIndex : "static"}
@@ -61,38 +62,42 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
               />
             </motion.div>
           </AnimatePresence>
-          <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
+
+          {/* Gradient overlay - MUST NOT block clicks */}
+          <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent pointer-events-none" />
           
-          <div className="absolute top-6 right-6 z-10 flex gap-3">
+          {/* Link buttons - MUST be clickable above everything */}
+          <div className="absolute top-6 right-6 z-50 flex gap-4 pointer-events-auto">
             {github && (
-              <motion.a
+              <a
                 href={github}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                whileHover={{ scale: 1.1, backgroundColor: "#fff", color: "#000" }}
-                whileTap={{ scale: 0.9 }}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-colors shadow-2xl"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-white hover:text-black shadow-2xl cursor-pointer"
               >
                 <Github className="h-7 w-7" />
-              </motion.a>
+              </a>
             )}
-            {live && (
-              <motion.a
+            {live ? (
+              <a
                 href={live}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                whileHover={{ scale: 1.1, backgroundColor: "#3b82f6", color: "#fff" }}
-                whileTap={{ scale: 0.9 }}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-colors shadow-2xl"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-blue-500 hover:text-white shadow-2xl cursor-pointer"
               >
                 <ExternalLink className="h-7 w-7" />
-              </motion.a>
-            )}
+              </a>
+            ) : gallery && gallery.length > 0 ? (
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all group-hover:bg-white group-hover:text-black">
+                <Eye className="h-7 w-7" />
+              </div>
+            ) : null}
           </div>
 
-          <div className="absolute bottom-0 left-0 p-8 md:p-12">
+          {/* Bottom text content - should not block card clicks */}
+          <div className="absolute bottom-0 left-0 p-8 md:p-12 pointer-events-none">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -156,9 +161,23 @@ export default function ProjectCard({ title, description, tags, image, gallery, 
             <Github className="h-5 w-5" />
           </motion.a>
         )}
-        <div className="rounded-full bg-white/5 p-3 transition-all group-hover:bg-white group-hover:text-black">
-          <ExternalLink className="h-5 w-5" />
-        </div>
+        {live ? (
+          <motion.a
+            href={live}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            whileHover={{ scale: 1.1, backgroundColor: "#3b82f6", color: "#fff" }}
+            whileTap={{ scale: 0.9 }}
+            className="rounded-full bg-white/10 p-3 text-white transition-all shadow-xl"
+          >
+            <ExternalLink className="h-5 w-5" />
+          </motion.a>
+        ) : gallery && gallery.length > 0 ? (
+          <div className="rounded-full bg-white/5 p-3 transition-all group-hover:bg-white group-hover:text-black">
+            <Eye className="h-5 w-5" />
+          </div>
+        ) : null}
       </div>
     </motion.div>
   );

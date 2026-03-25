@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 const LINKS = [
   { name: "Accueil", href: "#home" },
   { name: "À Propos", href: "#about" },
+  { name: "Compétences", href: "#skills" },
   { name: "Projets", href: "#work" },
   { name: "Contact", href: "#contact" },
 ];
@@ -16,7 +17,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "work", "contact"];
+      const sections = ["home", "about", "skills", "work", "contact"];
       const current = sections.find(section => {
         const el = document.getElementById(section);
         if (el) {
