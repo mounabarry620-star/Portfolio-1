@@ -205,9 +205,9 @@ export default function PersonalPage() {
             key="image"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 lg:px-20 z-10"
+            className="relative min-h-screen w-full flex items-center justify-center py-24 px-4 sm:px-6 lg:px-20 z-10"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 w-full max-w-7xl">
               
               {/* Left Column: Profile Card (4 slots) */}
               <div className="lg:col-span-4 flex flex-col gap-8">

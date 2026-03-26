@@ -103,6 +103,7 @@ const PROJECTS: Project[] = [
     details: "Développement d'une vitrine numérique haut de gamme utilisant Next.js. Intégration de Three.js pour les scènes 3D interactives, Framer Motion pour les transitions fluides, et une architecture backend sous NestJS.",
     tags: ["Next.js", "Tailwind CSS", "HUD"],
     image: "/images/projects/sae/portfolio.png",
+    github: "https://github.com/mounabarry620-star/Portfolio-1.git",
   },
 ];
 
@@ -174,7 +175,7 @@ export default function Home() {
           alt="Background"
           fill
           sizes="100vw"
-          className="object-cover object-center filter grayscale contrast-110 blur-[0.5px] brightness-105 transition-all duration-1000"
+          className="object-cover object-center filter contrast-125 brightness-110 blur-md transition-all duration-1000"
           priority
         />
         <div className="absolute inset-0 bg-linear-to-b from-[#1b2529]/60 via-transparent to-[#1b2529]/60" />
@@ -426,7 +427,7 @@ export default function Home() {
                initial={{ opacity: 0, x: 50, rotate: 0 }}
                whileHover={{ rotate: 0, scale: 1.1, zIndex: 10 }}
                transition={{ duration: 0.6 }}
-               className="relative lg:absolute top-0 right-14 w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group mb-10 lg:mb-0 transition-all cursor-pointer z-0"
+               className="relative mb-6 lg:mb-0 lg:absolute lg:top-[15%] lg:left-[5%] w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all cursor-pointer z-0"
              >
                 <Image 
                   src="/images/about/gamal.jpg" 
@@ -446,7 +447,7 @@ export default function Home() {
                initial={{ opacity: 0, x: 50, rotate: 0 }}
                whileHover={{ rotate: 0, scale: 1.1, zIndex: 10 }}
                transition={{ duration: 0.6, delay: 0.2 }}
-               className="relative lg:absolute top-32 right-2 w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all cursor-pointer z-5"
+               className="relative mb-6 lg:mb-0 lg:absolute lg:top-[5%] lg:right-[8%] w-full lg:w-80 aspect-4/3 rounded-2xl border-2 border-white/20 bg-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all cursor-pointer z-5"
              >
                 <Image 
                   src="/images/about/arles.jpg" 
