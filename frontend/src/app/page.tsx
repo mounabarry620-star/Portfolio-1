@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Section from "@/components/Section";
 import SkillCard from "@/components/SkillCard";
@@ -9,7 +9,7 @@ import ProjectCard from "@/components/ProjectCard";
 import ContactForm from "@/components/ContactForm";
 import SkillsShowcase from "@/components/SkillsShowcase";
 import GithubActivity from "@/components/GithubActivity";
-import { Mail, Github, Linkedin, ArrowDown, X } from "lucide-react";
+import { Mail, Github, Linkedin, ArrowDown, X, Instagram } from "lucide-react";
 
 interface Skill {
   name: string;
@@ -19,6 +19,7 @@ interface Skill {
 interface Project {
   title: string;
   description: string;
+  details?: string;
   tags: string[];
   image?: string;
   gallery?: string[];
@@ -46,6 +47,7 @@ const PROJECTS: Project[] = [
   {
     title: "HYPOXIA | L'Écho Numérique",
     description: "Une expérience immersive de survie qui révèle le coût invisible de l'IA. Tapez un prompt, et regardez le monde étouffer. 🌿🔥 (Gagnant DevArt 2026 - Next.js + R3F)",
+    details: "Hypoxia est un projet primé qui explore l'impact environnemental de l'IA à travers une simulation 3D interactive. Les utilisateurs interagissent avec un écosystème qui se dégrade en fonction de la complexité des requêtes envoyées à un modèle d'IA, sensibilisant aux coûts énergétiques cachés du numérique.",
     tags: ["Next.js", "Three.js", "AI", "Winner"],
     image: "/images/projects/devart/img_devArt.jpg",
     gallery: [
@@ -63,43 +65,89 @@ const PROJECTS: Project[] = [
   {
     title: "SAE 1.01 | Bibliothèque CLI",
     description: "Développement d'une application robuste en ligne de commande pour la gestion d'une bibliothèque numérique avec stockage .db et configuration ASCII personnalisé.",
+    details: "Cette SAE portait sur les bases de la programmation impérative en C++. Nous avons conçu un système de gestion de bibliothèque complet avec recherche multicritères, gestion d'emprunts et sauvegarde persistante des données, le tout dans une interface terminal soignée.",
     tags: ["C++", "CLI", "Data Management"],
-    image: "/images/projects/sae/s101.png",
+    image: "/images/projects/sae/s101.jpg",
   },
   {
     title: "SAE 1.02 | Site Web Statique",
     description: "Conception et réalisation d'un site vitrine responsive et moderne pour un client fictif, mettant en avant l'accessibilité et le design.",
+    details: "Réalisation d'un site web complet en HTML5/CSS3. Le projet mettait l'accent sur le respect des standards W3C, l'accessibilité (A11y), et une mise en page fluide capable de s'adapter à tous les supports numériques.",
     tags: ["HTML", "CSS", "UI/UX"],
     image: "/images/projects/sae/s102.png",
   },
   {
     title: "SAE 1.03 | Installation Multiboot",
     description: "Configuration d'un poste de travail expert en multiboot (Windows/Linux) via Oracle VirtualBox avec installation complète des outils de développement.",
+    details: "Expertise système sur le déploiement d'environnements de développement. Travail sur le partitionnement de disque, la gestion du GRUB, et la configuration réseau entre machines virtuelles sous distributions Debian et Windows.",
     tags: ["Linux", "VirtualBox", "System"],
-    image: "/images/projects/sae/s103.png",
+    image: "/images/projects/sae/s103.webp",
   },
   {
     title: "SAE 2.01 | Algorithmique",
     description: "Implémentation d'algorithmes complexes de tri et de recherche, avec analyse de complexité temporelle et spatiale en C++.",
+    details: "Approfondissement des structures de données et de l'algorithmique. Comparaison expérimentale des performances de différents tris (QuickSort, MergeSort) et étude rigoureuse de la complexité O(n log n).",
     tags: ["C++", "Algorithms"],
-    image: "/images/projects/sae/s201.png",
+    image: "/images/projects/sae/s201.jpg",
   },
   {
     title: "SAE 3.01 | Base de données",
     description: "Conception, normalisation et gestion d'une base de données relationnelle SQL avec travail collaboratif et requêtes complexes.",
+    details: "Projet de conception de base de données d'envergure. De la modélisation conceptuelle (MCD) à l'implémentation physique sous PostgreSQL, incluant des triggers, des vues complexes et une optimisation des index pour la performance.",
     tags: ["SQL", "Postgres", "Collaboration"],
     image: "/images/projects/sae/s301.png",
   },
   {
     title: "Mon Portfolio",
     description: "Mon portfolio interactif avec HUD dynamique, animations 3D et stack moderne Next.js.",
+    details: "Développement d'une vitrine numérique haut de gamme utilisant Next.js. Intégration de Three.js pour les scènes 3D interactives, Framer Motion pour les transitions fluides, et une architecture backend sous NestJS.",
     tags: ["Next.js", "Tailwind CSS", "HUD"],
     image: "/images/projects/sae/portfolio.png",
   },
 ];
 
+// ── Typewriter Hook ─────────────────────────────────────────────────────────
+const TYPED_ROLES = [
+  "Étudiant en BUT Informatique",
+  "Développeur Web",
+  "Passionné d'Intelligence Artificielle",
+  "Futur Ingénieur en Cybersécurité",
+];
+
+function useTypewriter(strings: string[], typingSpeed = 80, deletingSpeed = 40, pauseDelay = 2000) {
+  const [displayText, setDisplayText] = useState("");
+  const [stringIndex, setStringIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = strings[stringIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && displayText === current) {
+      // Finished typing, pause then start deleting
+      timeout = setTimeout(() => setIsDeleting(true), pauseDelay);
+    } else if (isDeleting && displayText === "") {
+      // Finished deleting, move to next string
+      setIsDeleting(false);
+      setStringIndex((prev) => (prev + 1) % strings.length);
+    } else {
+      // Type or delete one character
+      timeout = setTimeout(() => {
+        setDisplayText((prev) =>
+          isDeleting ? prev.slice(0, -1) : current.slice(0, prev.length + 1)
+        );
+      }, isDeleting ? deletingSpeed : typingSpeed);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, stringIndex, strings, typingSpeed, deletingSpeed, pauseDelay]);
+
+  return displayText;
+}
+
 export default function Home() {
-  const [activeGallery, setActiveGallery] = useState<string[] | null>(null);
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const typedRole = useTypewriter(TYPED_ROLES);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -116,7 +164,7 @@ export default function Home() {
       <motion.div
         style={{ 
           scale: useTransform(scrollYProgress, [0, 1], [1.1, 1.3]),
-          opacity: useTransform(scrollYProgress, [0, 0.5], [0.35, 0.15]),
+          opacity: useTransform(scrollYProgress, [0, 0.5], [0.45, 0.25]),
           y: useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
         }}
         className="fixed inset-0 z-0 pointer-events-none"
@@ -126,10 +174,10 @@ export default function Home() {
           alt="Background"
           fill
           sizes="100vw"
-          className="object-cover object-center filter grayscale contrast-125 blur-[1px] brightness-90 transition-all duration-1000"
+          className="object-cover object-center filter grayscale contrast-110 blur-[0.5px] brightness-105 transition-all duration-1000"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#1b2529]/60 via-transparent to-[#1b2529]/60" />
       </motion.div>
 
       {/* Background Aura */}
@@ -137,8 +185,8 @@ export default function Home() {
         style={{ scale: auraScale, opacity }}
         className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
       >
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-white/8 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-white/8 blur-[120px]" />
       </motion.div>
         {/* Hero Section */}
       <section id="home" className="relative flex min-h-screen flex-col items-center justify-center pt-20 z-10 px-6">
@@ -197,14 +245,31 @@ export default function Home() {
             </motion.div>
           </div>
           
-          {/* 3. Name & Subtext */}
-          <h1 className="hero-head-text !text-[4rem] sm:!text-[6rem] lg:text-[8rem]! leading-none">
-            BARRY Mamadou Bailo
-          </h1>
-          <p className="hero-sub-text mt-6">
-            Etudiant en Première année de BUT informatique à Arles
-            <span className="block mt-2 text-blue-400 font-bold tracking-[0.2em] uppercase text-[10px] sm:text-xs drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]">Parcours : Réalisation d&apos;applications : conception, développement, validation</span>
-          </p>
+          {/* 3. Name & Typed Subtitle */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hero-head-text text-[3rem]! sm:text-[5rem]! lg:text-[7rem]! leading-none tracking-tighter"
+          >
+            <span className="block text-white font-black">BARRY</span>
+            <span className="block text-white/80 text-[2rem] sm:text-[3rem] lg:text-[4rem] font-light tracking-wide mt-2">Mamadou Bailo</span>
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="mt-8"
+          >
+            <p className="text-xl sm:text-2xl md:text-3xl text-white/90 font-medium">
+              Je suis{" "}
+              <span className="text-blue-400 font-bold">
+                {typedRole}
+                <span className="animate-pulse text-blue-400">|</span>
+              </span>
+            </p>
+            <span className="block mt-4 text-blue-400/70 font-bold tracking-[0.2em] uppercase text-[10px] sm:text-xs drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]">Parcours : Réalisation d&apos;applications : conception, développement, validation</span>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -242,52 +307,95 @@ export default function Home() {
             <ProjectCard 
               key={i} 
               {...project} 
-              onClick={() => {
-                if (project.gallery) {
-                  setActiveGallery(project.gallery);
-                }
-              }}
+              onClick={() => setActiveProject(project)}
             />
           ))}
         </div>
       </Section>
 
-      {/* Gallery Modal */}
-      <AnimatePresence>
-        {activeGallery && (
+      {/* Enhanced Project Modal */}
+      <AnimatePresence mode="wait">
+        {activeProject && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 p-4 md:p-10 backdrop-blur-2xl"
             >
+              <div className="absolute inset-0 bg-linear-to-b from-blue-900/20 to-transparent pointer-events-none" />
+              
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setActiveGallery(null)}
-                className="absolute top-10 right-10 z-10 rounded-full bg-white/10 p-4 text-white hover:bg-white hover:text-black transition-colors"
+                onClick={() => setActiveProject(null)}
+                className="absolute top-6 right-6 md:top-10 md:right-10 z-110 rounded-full bg-white/10 p-4 text-white hover:bg-white hover:text-black transition-colors"
               >
                 <X className="h-6 w-6" />
               </motion.button>
 
               <div className="h-full w-full max-w-7xl overflow-y-auto no-scrollbar py-20 px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {activeGallery.map((img: string, i: number) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="relative aspect-4/3 overflow-hidden rounded-2xl border border-white/10 bg-white/5"
+                <div className="flex flex-col gap-12">
+                  {/* Header Info */}
+                  <div className="max-w-4xl">
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="inline-block rounded-full bg-blue-600 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6"
                     >
-                      <Image
-                        src={img}
-                        alt={`Gallery view ${i + 1}`}
-                        fill
-                        className="object-cover hover:scale-105 transition-transform duration-500"
-                      />
+                      Project Detail
                     </motion.div>
-                  ))}
+                    <h2 className="text-4xl md:text-7xl font-black text-white mb-8 tracking-tighter uppercase italic">{activeProject.title}</h2>
+                    <div className="flex flex-wrap gap-3 mb-10">
+                      {activeProject.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/70">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-medium whitespace-pre-line border-l-2 border-blue-500 pl-8">
+                      {activeProject.details || activeProject.description}
+                    </p>
+                  </div>
+
+                  {/* Gallery or Featured Image */}
+                  <div className="mt-8">
+                    {activeProject.gallery ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {activeProject.gallery.map((img: string, i: number) => (
+                          <motion.div
+                            key={img}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 + i * 0.1 }}
+                            className="relative aspect-video overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl group"
+                          >
+                            <Image
+                              src={img}
+                              alt={`${activeProject.title} view ${i + 1}`}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                            <div className="absolute inset-0 bg-blue-900/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : activeProject.image ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="relative w-full aspect-video md:aspect-21/9 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl"
+                      >
+                        <Image
+                          src={activeProject.image}
+                          alt={activeProject.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+                      </motion.div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -408,6 +516,7 @@ export default function Home() {
             <div className="mt-16 flex flex-wrap gap-6">
               {[
                 { name: "WhatsApp", icon: <svg className="h-6 w-6 fill-current" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>, href: "https://wa.me/33753172752" },
+                { name: "Instagram", icon: <Instagram className="h-6 w-6" />, href: "#" },
                 { name: "Github", icon: <Github className="h-6 w-6" />, href: "https://github.com/mounabarry620-star" },
                 { name: "Linkedin", icon: <Linkedin className="h-6 w-6" />, href: "https://www.linkedin.com/in/mamadou-baillo-barry-aa852333a" },
               ].map((social) => (

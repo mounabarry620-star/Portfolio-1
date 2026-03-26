@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
+import ChatBot from "@/components/ChatBot";
 
 const poppins = Poppins({ 
   subsets: ["latin"], 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Cursor />
           <Navbar />
           {children}
+          <ChatBot />
         </SmoothScroll>
       </body>
     </html>

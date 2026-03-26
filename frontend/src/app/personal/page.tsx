@@ -100,18 +100,32 @@ export default function PersonalPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full bg-[#0a0f12] text-[#eee] font-mono selection:bg-cyan-500/30 selection:text-white overflow-x-hidden">
-      {/* HUD Background Pattern */}
-      <div className="fixed inset-0 z-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15)_0%,transparent_70%)]" />
-      <div className="fixed inset-0 z-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+    <div className="relative min-h-screen w-full bg-[#080d10] text-[#eee] font-sans selection:bg-blue-500/30 selection:text-white overflow-x-hidden uppercase tracking-wide font-medium text-[13px]">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-0 select-none pointer-events-none overflow-hidden">
+        <Image
+          src="/images/backgrounds/background_terminal.webp"
+          alt="Background"
+          fill
+          priority
+          className="object-cover opacity-50 transition-opacity duration-1000"
+        />
+        {/* Overlay gradient - lighter to show more background */}
+        <div className="absolute inset-0 bg-linear-to-b from-[#0a0f12]/60 via-transparent to-[#0a0f12]/60" />
+        <div className="absolute inset-0 bg-[#0a0f12]/20" />
+      </div>
+
+      {/* HUD Background Pattern - softened */}
+      <div className="fixed inset-0 z-0 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)]" />
+      <div className="fixed inset-0 z-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
       {/* Back Button */}
       <button 
         onClick={() => router.push("/")}
-        className="fixed top-8 left-8 z-50 flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-950/20 px-6 py-2 backdrop-blur-md transition-all hover:bg-cyan-500/20 group"
+        className="fixed top-8 left-8 z-50 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-2 backdrop-blur-md transition-all hover:bg-white/10 group"
       >
-        <ArrowLeft className="h-4 w-4 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
-        <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400/80 group-hover:text-cyan-400">EXIT_HUD</span>
+        <ArrowLeft className="h-4 w-4 text-white group-hover:-translate-x-1 transition-transform" />
+        <span className="text-[10px] font-black tracking-[0.3em] text-white/60 group-hover:text-white">RETOUR</span>
       </button>
 
       <AnimatePresence mode="wait">
@@ -122,7 +136,7 @@ export default function PersonalPage() {
             className="flex h-screen flex-col p-10 overflow-hidden bg-[#050505]"
           >
             {BIOS_LINES.slice(0, biosIndex).map((line, i) => (
-              <p key={i} className="mb-1 text-base leading-relaxed text-cyan-500/80">{line || "\u00A0"}</p>
+              <p key={i} className="mb-1 text-base leading-relaxed text-white/40">{line || "\u00A0"}</p>
             ))}
           </motion.div>
         )}
@@ -133,33 +147,58 @@ export default function PersonalPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex h-screen items-center justify-center p-6 bg-[#050505]"
+            className="flex h-screen items-center justify-center p-6 bg-[#080d10]"
           >
-            <div className="w-full max-w-3xl rounded-xl border border-cyan-500/20 bg-cyan-950/10 p-8 shadow-[0_0_50px_rgba(6,182,212,0.1)]">
-              <div className="mb-6 border-b border-cyan-500/10 pb-4 text-xs font-medium text-cyan-400/40">
-                barry@hud-system:~$ ./access_profile.sh
+            <div className="w-full max-w-3xl">
+              {/* Softened decor top */}
+              <div className="mb-6 opacity-30">
+                <div className="flex h-[2px] mb-[6px] gap-[10px]">
+                  <div className="w-[80px] h-[2px] bg-white/20" />
+                  <div className="w-[120px] h-[2px] bg-white/10" />
+                </div>
               </div>
-              <div className="space-y-2">
-                {TERMINAL_LINES.slice(0, displayedTerminalLines).map((line, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className={`text-base leading-relaxed ${(line.color || 'text-white').replace('white', 'cyan')}`}
-                  >
-                    {line.text || "\u00A0"}
-                  </motion.div>
-                ))}
-                <motion.div 
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 0.8, repeat: Infinity }}
-                  className="inline-block h-5 w-2 bg-cyan-400 align-middle ml-1 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                />
+
+              {/* Terminal Window */}
+              <div className="rounded-2xl border border-white/5 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
+                {/* Header bar with dots */}
+                <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
+                  <div className="flex gap-2">
+                    <div className="h-2 w-2 rounded-full bg-white/20" />
+                    <div className="h-2 w-2 rounded-full bg-white/10" />
+                    <div className="h-2 w-2 rounded-full bg-white/5" />
+                  </div>
+                  <span className="ml-4 text-[10px] font-medium text-white/20 tracking-widest uppercase">system@barry:~$ INITIALIZING...</span>
+                </div>
+                <div className="space-y-2">
+                  {TERMINAL_LINES.slice(0, displayedTerminalLines).map((line, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`text-base leading-relaxed font-mono ${(line.color || 'text-white').replace('cyan', 'white')}`}
+                    >
+                      {line.text || "\u00A0"}
+                    </motion.div>
+                  ))}
+                  <motion.div 
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity }}
+                    className="inline-block h-5 w-1 bg-white align-middle ml-1"
+                  />
+                </div>
+              </div>
+
+              {/* Softened decor bottom */}
+              <div className="mt-6 opacity-20">
+                <div className="flex h-px gap-[10px]">
+                  <div className="w-[150px] h-px bg-white/20" />
+                </div>
               </div>
             </div>
           </motion.div>
         )}
+
 
         {phase === "image" && (
           <motion.div 
@@ -172,7 +211,7 @@ export default function PersonalPage() {
               
               {/* Left Column: Profile Card (4 slots) */}
               <div className="lg:col-span-4 flex flex-col gap-8">
-                <HudCard title="Dossier : BF-1992" delay={0.2}>
+                <HudCard title="Profil de BF-2005" delay={0.2}>
                   <ProfileCard 
                     photo="/images/profile.png"
                     name="Barry Mamadou Bailo"
@@ -203,9 +242,9 @@ export default function PersonalPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.4 }}
                   transition={{ delay: 1.5 }}
-                  className="mt-auto text-center font-mono text-[10px] tracking-[0.5em] text-cyan-400 uppercase"
+                  className="mt-auto text-center font-sans text-[9px] tracking-[0.4em] text-white/30 uppercase font-bold"
                 >
-                  // BARRY MAMADOU BAILO — DATA SECURED — ACCESS GRANTED //
+                  — BARRY MAMADOU BAILO — PROFILE ACCESS AUTHORIZED —
                 </motion.div>
               </div>
 
