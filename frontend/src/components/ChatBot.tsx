@@ -25,7 +25,7 @@ const KNOWLEDGE = {
   competences:
     "Barry maîtrise : **C++**, **Python**, **SQL/PostgreSQL**, **HTML/CSS**, **Git**, **Linux**, **Bash**, **Qt**, **SageMath** et **VS Code**. Il continue d'approfondir ses compétences chaque jour. 💻",
   projets:
-    "Voici ses projets principaux :\n• 🏆 **HYPOXIA** – Projet gagnant DevArt 2026, une expérience immersive sur l'impact de l'IA (Next.js + Three.js)\n• 📚 **SAE 1.01** – Bibliothèque CLI en C++\n• 🌐 **SAE 1.02** – Site web statique responsive\n• 🖥️ **SAE 1.03** – Installation multiboot\n• 🧮 **SAE 2.01** – Algorithmique avancée en C++\n• 🗄️ **SAE 3.01** – Base de données PostgreSQL\n• 🎨 **Portfolio** – Ce site interactif !",
+    "Voici ses projets principaux :\n• 🏆 **HYPOXIA** – Projet gagnant DevArt 2026, une expérience immersive sur l'impact de l'IA (Next.js + Three.js)\n• 🎨 **Portfolio** – Ce site interactif ! (Lien : [portfolio-1-gamma-azure.vercel.app](https://portfolio-1-gamma-azure.vercel.app/))\n• 📚 **SAE 1.01** – Bibliothèque CLI en C++\n• 🌐 **SAE 1.02** – Site web statique responsive\n• 🖥️ **SAE 1.03** – Installation multiboot\n• 🧮 **SAE 2.01** – Algorithmique avancée en C++\n• 🗄️ **SAE 3.01** – Base de données PostgreSQL",
   hypoxia:
     "**HYPOXIA | L'Écho Numérique** est le projet phare de Barry ! 🏆 C'est une expérience immersive de survie qui révèle le coût invisible de l'IA. Tapez un prompt, et regardez le monde étouffer. Gagnant du **DevArt 2026**, développé avec Next.js et Three.js (R3F). Tu peux le tester ici : [nebula-gray-seven.vercel.app](https://nebula-gray-seven.vercel.app/)",
   contact:

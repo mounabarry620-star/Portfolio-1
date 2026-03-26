@@ -104,6 +104,7 @@ const PROJECTS: Project[] = [
     tags: ["Next.js", "Tailwind CSS", "HUD"],
     image: "/images/projects/sae/portfolio.png",
     github: "https://github.com/mounabarry620-star/Portfolio-1.git",
+    live: "https://portfolio-1-gamma-azure.vercel.app",
   },
 ];
 
