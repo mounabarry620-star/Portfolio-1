@@ -98,7 +98,7 @@ export default function ContactForm() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={status === "sending"}
-              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 font-bold text-black transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] disabled:opacity-50"
+              className="contact-submit-btn group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 font-bold text-black transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] disabled:opacity-50"
             >
               {status === "sending" ? "Envoi en cours..." : "Envoyer le message"}
               <Send className="h-5 w-5 transition-transform group-hover:translate-x-1" />
