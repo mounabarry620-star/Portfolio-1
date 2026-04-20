@@ -234,3 +234,8 @@ html.light .contact-submit-btn:hover {
 html.light footer {
   color: rgba(15, 23, 42, 0.25);
 }
+
+/* ── Scrollbar masqué ─────────────────────────── */
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
